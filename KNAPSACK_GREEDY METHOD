@@ -1,0 +1,90 @@
+import java.util.Scanner;
+
+public class KNAPSACK_GREEDY {
+	private double weight[],profit[],ratio[],solnVector[];
+	private double capacity;
+	KNAPSACK_GREEDY()
+	{
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the number of items -");
+		int n=sc.nextInt();
+		
+		weight=new double[n];
+		System.out.println("Enter the weights of the items -");
+		for(int i=0;i<n;i++)
+			weight[i]=sc.nextInt();
+		
+		profit=new double[n];
+		System.out.println("Enter the profits of the items -");
+		for(int i=0;i<n;i++)
+			profit[i]=sc.nextInt();
+		ratio=new double[n];
+		solnVector=new double[n];
+		System.out.println("Enter Capacity of Knapsack");
+		capacity = sc.nextDouble();
+		sc.close();
+	}
+	
+		int getNext() 
+		{
+		       int index = -1;
+		       double highest = 0;
+		       for(int i = 0;i<ratio.length;i++)
+		       {
+		          if(ratio[i]>highest)
+		          {
+		              highest=ratio[i];
+		              index = i;
+		          }
+		       }
+		  return index;
+		}
+		
+		void fill() 
+		{
+		   double currentWeight = 0;
+		   double currentProfit = 0;
+		   for(int i=0;i<ratio.length;i++)
+		   {
+		       ratio[i] = profit[i]/weight[i];
+		   }
+           System.out.print("Items Considered: ");
+		   while(currentWeight<capacity)
+		   {
+		        int item = getNext();
+		        if(item==-1)
+		        {
+		            break; 
+		        }
+		        System.out.print((item + 1) + " ");
+		        if(currentWeight + weight[item]<=capacity)
+		        {
+		             currentWeight += weight[item];
+		             currentProfit += profit[item];
+		             solnVector[item] = 1;
+		             ratio[item]=0;
+		        }
+		        else 
+		        {
+		             currentProfit += ratio[item]*(capacity-currentWeight);
+		             solnVector[item] =(capacity-currentWeight)/weight[item];
+		             break;
+		        }
+		    }
+		    System.out.println();
+		    System.out.println("MAXIMUM PROFIT is: " + currentProfit);
+		    System.out.println("SOLUTION VECTOR : ");
+		    System.out.print("[ ");
+		    for(int i=0;i<solnVector.length;i++)
+		    {
+		       System.out.print(solnVector[i] +"  ");
+		    }
+		    System.out.print("]\n");
+		    }
+		    
+		    public static void main(String[] args)
+		    {
+		    	KNAPSACK_GREEDY knapsack = new KNAPSACK_GREEDY();
+		        knapsack.fill();
+		    }
+}
